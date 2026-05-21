@@ -16,7 +16,7 @@ function AddElement(OfficeID, TimeStamp, Name, Attendance)
 {
     const newRow = document.createElement("tr");
     const cell0 = document.createElement("td");
-    
+
     if (OfficeID != 0) {
 
         const checkbox = document.createElement("input");
@@ -40,6 +40,11 @@ function AddElement(OfficeID, TimeStamp, Name, Attendance)
     newRow.appendChild(cell3);
 
     table.appendChild(newRow);
+}
+
+function RemoveAllElements() {
+  const rows = document.querySelectorAll("#ParadeStateTable tr:nth-child(n+2)");
+  rows.forEach(row => row.remove());
 }
 
 function LoadData() 
@@ -117,8 +122,7 @@ async function ShowData() {
     }
     
     console.log("All data loaded successfully!");
-    
-    let finalOutput = "-- TSB Office Parade State Summary --\n\n";
+    RemoveAllElements();
     officeManager.Print();
     table.hidden = false;
     LoadData();

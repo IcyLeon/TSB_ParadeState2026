@@ -44,7 +44,6 @@ class Office
 
     if (!this.Teams.has(Team)) {
       this.Teams.set(Team, []);
-      console.log(Team);
     }
 
     this.Teams.get(Team).push(staff);
