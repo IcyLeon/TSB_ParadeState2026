@@ -1,5 +1,10 @@
 var table = document.getElementById("ParadeStateTable");
-table.hidden = true;
+HideTable(true);
+
+function HideTable(toggle)
+{
+    table.hidden = toggle;
+}
 
 function AddTeamElement(Team)
 {
@@ -105,8 +110,24 @@ function ClearSavedData() {
     checkboxes.forEach(cb => cb.checked = false);
 }
 
+function ThrowErrorReport()
+{
+    RemoveAllElements();
+    HideTable(true);
+    document.getElementById("report").innerText = "Failed to load data.";
+}
+
 async function ShowData() {
-  try {
+    const token = gapi.client.getToken();
+    document.getElementById("report").innerText = "";
+
+    try {
+  
+        if (!token || !token.access_token) {
+            ThrowErrorReport();
+            return; // Block the function from executing
+        }
+        
     // FIXED: Run sequentially because Staff relies on Offices, and Attendance relies on Staff.
     console.log("Loading Offices...");
     await read_Office();
@@ -122,14 +143,14 @@ async function ShowData() {
     }
     
     console.log("All data loaded successfully!");
-    RemoveAllElements();
+
     officeManager.Print();
-    table.hidden = false;
+    HideTable(false);
     LoadData();
     
   } catch (error) {
-    table.hidden = true;
+    HideTable(true);
     console.error("Execution failed: ", error);
-    document.getElementById("report").innerText = "Failed to load data.";
+    ThrowErrorReport();
   }
 }

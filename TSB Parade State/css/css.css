@@ -23,6 +23,11 @@ table
     padding: 10px 20px;
 }
 
+#WelcomeMessage
+{
+    text-align: center;
+}
+
 .Header-text {
     flex-direction: column;
     flex-grow: 1;

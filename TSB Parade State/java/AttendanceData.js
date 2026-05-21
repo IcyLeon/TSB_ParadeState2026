@@ -134,6 +134,7 @@ class OfficeManager
 
   Print()
   {
+    RemoveAllElements();
     for (let office of this.OfficeList.values()) {
       office.Print();
     }

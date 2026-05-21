@@ -29,6 +29,7 @@ async function gisLoaded() {
       if (resp.error !== undefined) {
         throw (resp);
       }
+
       gapi.client.setToken(resp); 
       updateSignInStatus(true);
     },
@@ -38,32 +39,58 @@ async function gisLoaded() {
 }
 
 // This helper function safely fires only when both scripts are 100% ready
-function checkAuthReady() {
+async function checkAuthReady() {
   if (gapiInited && gIsInited) {
     const token = gapi.client.getToken();
+    if (token === null) {
+      tokenClient.requestAccessToken({ prompt: 'none' });
+    }
+    else
+    {
+      try {
+        const userInfo = await gapi.client.oauth2.userinfo.get();
+        const userName = userInfo.result.given_name || userInfo.result.name;
+        updateSignInStatus(true, userName);
+        return;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     updateSignInStatus(token !== null);
   }
 }
 
-function updateSignInStatus(isSignedIn) {
+function updateSignInStatus(isSignedIn, userName = null) {
   var btn = document.getElementById("SignIn");
+  var welcomeText = document.getElementById("WelcomeMessage");
 
   if (!btn) 
     return;
 
   if (isSignedIn) {
     console.log("User signed in. Fetching spreadsheet data...");
+    if (welcomeText && userName)
+    {
+      welcomeText.textContent = `Welcome, ${userName}!`;
+    }
+
     btn.textContent = "Log Out";
   } else {
     console.log("User signed out.");
+    if (welcomeText)
+    {
+      welcomeText.textContent = "";
+    }
+
     btn.textContent = "Sign In";
+    
   }
 }
 
 function handleSignInClick() {
   const token = gapi.client.getToken();
   if (token === null) {
-    tokenClient.requestAccessToken({ prompt: 'consent' });
+    tokenClient.requestAccessToken({ prompt: 'select_account' });
     return;
   }
 
