@@ -1,0 +1,15 @@
+td, th, tr {
+    border: 1px solid black;
+    padding: 2px;
+}
+
+table
+{
+    width: 100%;
+}
+
+.Team > th
+{
+    text-align: left;
+    font-weight: lighter;
+}
