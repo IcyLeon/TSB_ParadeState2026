@@ -76,8 +76,13 @@ function Save()
 
     rows.forEach(row => {
         const cells = row.querySelectorAll("td");
+        var checkbox = cells[0]?.querySelector("input");
+
+        if (!checkbox)
+            return;
+
         const rowData = {
-            checked: cells[0].querySelector("input").checked,
+            checked: checkbox.checked,
             name: cells[2].textContent,
         };
         tableData.push(rowData);
