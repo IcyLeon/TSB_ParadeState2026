@@ -1,3 +1,7 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 td, th, tr {
     border: 1px solid black;
     padding: 2px;
@@ -12,4 +16,59 @@ table
 {
     text-align: left;
     font-weight: lighter;
+}
+
+.Headers
+{
+    padding: 10px 20px;
+}
+
+.Header-text {
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.Headers img
+{
+    width: 70px;
+    height: auto;
+}
+
+.SMTI-Logo, 
+.AMS-Logo
+{
+    position: absolute;
+    top: 10px;
+}
+
+.SMTI-Logo
+{
+  right: 15px; 
+}
+
+.AMS-Logo {
+  left: 15px;
+}
+
+.Header-text *
+{
+    margin: 0;
+}
+
+.Header-text p
+{
+    padding-bottom: 10px;
+}
+
+.func-btns
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.func-btns button
+{
+    margin: 0 5px 0 5px;
 }

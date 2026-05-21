@@ -82,7 +82,7 @@ class Office
     for (let [team, staffList] of this.Teams) {
       AddTeamElement(team);
       for (let staff of staffList) {
-        AddElement(staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1]);
+        AddElement(this.OfficeID, staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1]);
       }
     }
   }

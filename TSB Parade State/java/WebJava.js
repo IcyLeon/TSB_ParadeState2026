@@ -12,17 +12,20 @@ function AddTeamElement(Team)
     table.appendChild(newRow);
 }
 
-function AddElement(TimeStamp, Name, Attendance)
+function AddElement(OfficeID, TimeStamp, Name, Attendance)
 {
-    const cell0 = document.createElement("td");
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = false;
-    checkbox.addEventListener("change", Save);
-    cell0.appendChild(checkbox);
-
-
     const newRow = document.createElement("tr");
+    const cell0 = document.createElement("td");
+    
+    if (OfficeID != 0) {
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = false;
+        checkbox.addEventListener("change", Save);
+        cell0.appendChild(checkbox);
+    }
+
     const cell1 = document.createElement("td");
     const cell2 = document.createElement("td");
     const cell3 = document.createElement("td");

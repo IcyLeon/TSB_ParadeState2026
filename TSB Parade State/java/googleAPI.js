@@ -1,7 +1,3 @@
-// Place these at the very top so async HTML elements can always find them
-window.gapiLoaded = gapiLoaded;
-window.gisLoaded = gisLoaded;
-
 // Global variables to track when each script is fully loaded
 let tokenClient;
 let gapiInited = false;
@@ -33,35 +29,45 @@ async function gisLoaded() {
       if (resp.error !== undefined) {
         throw (resp);
       }
+      gapi.client.setToken(resp); 
       updateSignInStatus(true);
     },
   });
   gIsInited = true;
-  checkAuthReady(); // Check readiness here
+  checkAuthReady();
 }
 
 // This helper function safely fires only when both scripts are 100% ready
 function checkAuthReady() {
   if (gapiInited && gIsInited) {
     const token = gapi.client.getToken();
-    
-    if (token !== null) {
-      // User is already validated in this browser session
-      updateSignInStatus(true);
-    } else {
-      console.log("Attempting automatic sign-in...");
-      tokenClient.requestAccessToken({ prompt: '' });
-    }
+    updateSignInStatus(token !== null);
   }
 }
 
 function updateSignInStatus(isSignedIn) {
+  var btn = document.getElementById("SignIn");
+
+  if (!btn) 
+    return;
+
   if (isSignedIn) {
     console.log("User signed in. Fetching spreadsheet data...");
-
+    btn.textContent = "Log Out";
   } else {
     console.log("User signed out.");
+    btn.textContent = "Sign In";
   }
+}
+
+function handleSignInClick() {
+  const token = gapi.client.getToken();
+  if (token === null) {
+    tokenClient.requestAccessToken({ prompt: 'consent' });
+    return;
+  }
+
+  handleSignOutClick();
 }
 
 function handleSignOutClick() {

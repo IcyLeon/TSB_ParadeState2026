@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/css.css" />
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Parade State - Checker</title>
+    <title>TSB Parade State - Checker</title>
     <script src="java/AttendanceData.js" defer></script>
     <script src="java/googleAPI.js" defer></script>
     <script src="java/WebJava.js" defer></script>
@@ -15,8 +15,23 @@
 </head>
 
 <body>
-    <button onclick="ShowData()">Load TSB/SIT Attendance</button>
-    <button onclick="ClearSavedData()">Clear Save Data</button>
+    <div class="Headers">
+        <div class = "Header-text">
+            <h2>TSB Parade State 2026</h2>
+            <p>Developed By: LCP Randall Soh</p>
+        </div>
+        <div class="SMTI-Logo">
+            <img src="images/SMTI Logo.png">
+        </div>
+        <div class="AMS-Logo">
+            <img src="images/ams.png">
+        </div>
+        <div class="func-btns">
+            <button onclick="ShowData()">Load TSB/SIT Attendance</button>
+            <button onclick="ClearSavedData()">Clear Save Data</button>
+            <button id="SignIn" onclick="handleSignInClick()">Sign In</button>
+        </div>
+    </div>
 
     <p id="report"></p>
     <table id = "ParadeStateTable">
