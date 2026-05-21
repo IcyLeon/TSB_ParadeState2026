@@ -48,7 +48,7 @@ function LoadData()
     const tableData = JSON.parse(savedData);
     tableData.forEach((data) => {
         const targetRow = FindRowByName(data.name);
-        var checkBox = targetRow.querySelector("input");
+        var checkBox = targetRow?.querySelector("input");
         if (checkBox)
         {
             checkBox.checked = data.checked;
