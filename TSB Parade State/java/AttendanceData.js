@@ -10,7 +10,7 @@ class Staff
 
   UpdateAttendance(TimeStamp, Attendance)
   {
-    this.attendanceDetails = [TimeStamp, Attendance];
+    this.AttendanceDetails = [TimeStamp, Attendance];
   }
 }
 
@@ -59,8 +59,8 @@ class Office
   CountPresent()
   {
     let count = 0;
-    for (let attendanceDetails of this.Staffs.values()) {
-      const upper = attendanceDetails[1].toUpperCase();
+    for (let staff of this.Staffs.Keys()) {
+      const upper = staff.AttendanceDetails[1].toUpperCase();
       if (upper.includes("PRESENT") || upper.includes("NSC")) {
         count++;
       }
@@ -82,8 +82,7 @@ class Office
     for (let [team, staffList] of this.Teams) {
       AddTeamElement(team);
       for (let staff of staffList) {
-        const attendanceDetails = this.Staffs.get(staff);
-        AddElement(attendanceDetails[0], staff.StaffName, attendanceDetails[1]);
+        AddElement(staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1]);
       }
     }
   }
