@@ -16,13 +16,16 @@ class Staff
 
 class Office
 {
-  Staffs = new Map();
-  Teams = new Map();
+  #Teams;
 
   constructor(OfficeName, OfficeID)
   {
     this.OfficeName = OfficeName;
     this.OfficeID = OfficeID;
+
+    this.Staffs = new Map();
+    this.Teams = new Map();
+    this.TeamPresentCount = new Map();
   }
 
   GetStaff(StaffName) {
@@ -32,7 +35,6 @@ class Office
     }
     return undefined;
   }
-  
 
   AddStaff(StaffName, Team)
   {
@@ -52,20 +54,24 @@ class Office
   UpdateAttendance(TimeStamp, StaffName, Attendance)
   {
     var staff = this.GetStaff(StaffName);
-    staff.UpdateAttendance(TimeStamp, Attendance)
+    staff.UpdateAttendance(TimeStamp, Attendance);
   }
-
-  CountPresent()
+  
+  CountPresent(Team)
   {
-    let count = 0;
-    for (let staff of this.Staffs.Keys()) {
+    var staffList = this.Teams.get(Team);
+    var count = 0;
+
+    for (let staff of staffList) {
       const upper = staff.AttendanceDetails[1].toUpperCase();
       if (upper.includes("PRESENT") || upper.includes("NSC")) {
         count++;
       }
     }
+
     return count;
   }
+  
   
   // GetPrintText() {
   //   let output = `--${this.OfficeName}: (${this.CountPresent()}/${this.Staffs.size})--\n`;
@@ -79,7 +85,7 @@ class Office
   {
     // 1. Loop through each team and its array of staff members
     for (let [team, staffList] of this.Teams) {
-      AddTeamElement(team);
+      AddTeamElement(team, this.CountPresent(team), staffList.length);
       for (let staff of staffList) {
         AddElement(this.OfficeID, staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1]);
       }

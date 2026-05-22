@@ -6,13 +6,13 @@ function HideTable(toggle)
     table.hidden = toggle;
 }
 
-function AddTeamElement(Team)
+function AddTeamElement(TeamName, NoOfPresent = 0, TotalStaffsInTeam)
 {
     const newRow = document.createElement("tr");
     newRow.classList.add("Team");
     const cell1 = document.createElement("th");
     cell1.setAttribute("colspan", "4"); 
-    cell1.textContent = Team;
+    cell1.textContent = `${TeamName} (${NoOfPresent}/${TotalStaffsInTeam})`;
     newRow.appendChild(cell1);
     table.appendChild(newRow);
 }
