@@ -20,7 +20,22 @@ table
 
 .Headers
 {
-    padding: 10px 20px;
+    display: grid;
+    grid-template-areas: 
+    "Logo Body Logo2"
+    "Message Message Message";
+    grid-template-columns: 1fr 3fr 1fr;
+    padding: 10px 10px;
+}
+
+.User-text
+{
+    grid-area: Message;
+}
+
+.Middle-Header
+{
+    grid-area: Body;
 }
 
 #WelcomeMessage
@@ -36,24 +51,26 @@ table
 
 .Headers img
 {
-    width: 70px;
+    width: inherit;
     height: auto;
 }
 
 .SMTI-Logo, 
 .AMS-Logo
 {
-    position: absolute;
-    top: 10px;
+    position: relative;
+    width: 70px;
 }
 
 .SMTI-Logo
 {
-  right: 15px; 
+    grid-area: Logo;
+    justify-self: start;
 }
 
 .AMS-Logo {
-  left: 15px;
+    grid-area: Logo2;
+    justify-self: end;
 }
 
 .Header-text *

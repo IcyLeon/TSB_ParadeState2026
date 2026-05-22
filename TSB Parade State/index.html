@@ -16,22 +16,26 @@
 
 <body>
     <div class="Headers">
-        <div class = "Header-text">
-            <h2>TSB Parade State 2026</h2>
-            <p>Developed By: LCP Randall Soh</p>
-        </div>
         <div class="SMTI-Logo">
             <img src="images/SMTI Logo.png">
+        </div>
+        <div class="Middle-Header">
+            <div class = "Header-text">
+                <h2>TSB Parade State 2026</h2>
+                <p>Developed By: LCP Randall Soh</p>
+            </div>
+            <div class="func-btns">
+                <button onclick="ShowData()">Load TSB/SIT Attendance</button>
+                <button onclick="ClearSavedData()">Clear Save Data</button>
+                <button id="SignIn" onclick="handleSignInClick()">Sign In</button>
+            </div>
         </div>
         <div class="AMS-Logo">
             <img src="images/ams.png">
         </div>
-        <div class="func-btns">
-            <button onclick="ShowData()">Load TSB/SIT Attendance</button>
-            <button onclick="ClearSavedData()">Clear Save Data</button>
-            <button id="SignIn" onclick="handleSignInClick()">Sign In</button>
+        <div class ="User-text">
+            <p id="WelcomeMessage"></p>
         </div>
-        <p id="WelcomeMessage"></p>
     </div>
 
     <p id="report"></p>

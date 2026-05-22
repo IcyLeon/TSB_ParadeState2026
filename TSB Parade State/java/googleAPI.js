@@ -6,13 +6,13 @@ let gIsInited = false; // Keep this to safely handle async loading speeds
 const API_KEY = 'AIzaSyAzYkNSQHsce0jeeDWRj345QkZDnbTLQxQ';
 const CLIENT_ID = '1049186851076-f4hrd8ctndsjod5bp0kf6uc96svpa6c2.apps.googleusercontent.com';
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly openid profile';
 
 async function gapiLoaded() {
-  gapi.load('client', intializeGapiClient);
+  gapi.load('client', initializeGapiClient);
 }
 
-async function intializeGapiClient() {
+async function initializeGapiClient() {
   await gapi.client.init({
     apiKey: API_KEY,
     discoveryDocs: [DISCOVERY_DOC],
@@ -31,7 +31,12 @@ async function gisLoaded() {
       }
 
       gapi.client.setToken(resp); 
+      await fetchAndRenderUserInfo();
       updateSignInStatus(true);
+    },
+    error_callback: (err) => {   
+      console.warn("Silent auth failed:", err.type);
+      updateSignInStatus(false);
     },
   });
   gIsInited = true;
@@ -47,16 +52,31 @@ async function checkAuthReady() {
     }
     else
     {
-      try {
-        const userInfo = await gapi.client.oauth2.userinfo.get();
-        const userName = userInfo.result.given_name || userInfo.result.name;
-        updateSignInStatus(true, userName);
-        return;
-      } catch (e) {
-        console.error(e);
-      }
+      await fetchAndRenderUserInfo();
     }
-    updateSignInStatus(token !== null);
+  }
+}
+
+async function fetchAndRenderUserInfo() {
+  try {
+    const currentToken = gapi.client.getToken();
+    if (!currentToken || !currentToken.access_token) {
+      throw new Error('No active access token found');
+    }
+
+    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${currentToken.access_token}` }
+    });
+
+    if (!response.ok) throw new Error('Token invalid or expired');
+
+    const userInfo = await response.json();
+    const userName = userInfo.given_name || userInfo.name;
+    updateSignInStatus(true, userName);
+  } catch (e) {
+    console.error("Auth validation error:", e);
+    gapi.client.setToken(null);
+    updateSignInStatus(false);
   }
 }
 
@@ -101,7 +121,7 @@ function handleSignOutClick() {
   const token = gapi.client.getToken();
   if (token !== null) {
     google.accounts.oauth2.revoke(token.access_token, () => {
-      gapi.client.setToken('');
+      gapi.client.setToken(null);
       updateSignInStatus(false);
     });
   }
