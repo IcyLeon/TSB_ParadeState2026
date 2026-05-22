@@ -65,7 +65,6 @@ table
 .AMS-Logo
 {
     position: relative;
-    width: 70px;
 }
 
 #ParadeStateTable tr:first-child th 
@@ -76,13 +75,15 @@ table
 
 .SMTI-Logo
 {
-    grid-area: Logo;
-    justify-self: start;
+    grid-area: Logo2;
+    width: 80px;
+    justify-self: end;
 }
 
 .AMS-Logo {
-    grid-area: Logo2;
-    justify-self: end;
+    width: 70px;
+    grid-area: Logo;
+    justify-self: start;
 }
 
 .Header-text *
