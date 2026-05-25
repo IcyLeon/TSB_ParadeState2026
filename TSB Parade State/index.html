@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/css.css" />
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>TSB Parade State - Checker</title>
+    <title>TSB Parade State</title>
     <script src="java/AttendanceData.js" defer></script>
     <script src="java/googleAPI.js" defer></script>
     <script src="java/WebJava.js" defer></script>
@@ -25,7 +25,8 @@
                 <p>Developed By: LCP Randall Soh</p>
             </div>
             <div class="func-btns">
-                <button onclick="ShowData()">Load TSB/SIT Attendance</button>
+                <button onclick="ShowTLSBData()">Load TLSB/COMD Attendance</button>
+                <button onclick="ShowTSBData()">Load TSB/SIT Attendance</button>
                 <button onclick="ClearSavedData()">Clear Save Data</button>
                 <button id="SignIn" onclick="handleSignInClick()">Sign In</button>
             </div>

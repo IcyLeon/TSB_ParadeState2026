@@ -17,12 +17,12 @@ function AddTeamElement(TeamName, NoOfPresent = 0, TotalStaffsInTeam)
     table.appendChild(newRow);
 }
 
-function AddElement(OfficeID, TimeStamp, Name, Attendance)
+function AddElement(OfficeID, TimeStamp, Name, Attendance, spreadsheetId)
 {
     const newRow = document.createElement("tr");
     const cell0 = document.createElement("td");
 
-    if (OfficeID != 0) {
+    if (OfficeID != 0 && spreadsheetId == SPREADSHEET_ID_TSB) {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -117,7 +117,8 @@ function ThrowErrorReport()
     document.getElementById("report").innerText = "Failed to load data.";
 }
 
-async function ShowData() {
+
+async function ShowTLSBData() {
     const token = gapi.client.getToken();
     document.getElementById("report").innerText = "";
 
@@ -128,16 +129,54 @@ async function ShowData() {
             return; // Block the function from executing
         }
         
-    // FIXED: Run sequentially because Staff relies on Offices, and Attendance relies on Staff.
+
     console.log("Loading Offices...");
-    await read_Office();
+    await read_Office(SPREADSHEET_ID_TLSB, 'HonourRoll!F2:G');
     
     console.log("Loading Staff...");
-    await read_Staffs();
+    await read_Staffs(SPREADSHEET_ID_TLSB, 'HonourRoll!A2:D');
     
     console.log("Loading Attendance...");
     try {
-      await read_Attendance();
+      await read_Attendance(SPREADSHEET_ID_TLSB, 'AttendanceRoll!A2:C');
+    } catch (attendanceError) {
+      console.warn("Attendance failed to load, carrying on without it:", attendanceError);
+    }
+    
+    console.log("All data loaded successfully!");
+
+    officeManager.Print();
+    HideTable(false);
+    LoadData();
+    
+  } catch (error) {
+    HideTable(true);
+    console.error("Execution failed: ", error);
+    ThrowErrorReport();
+  }
+}
+
+async function ShowTSBData() {
+    const token = gapi.client.getToken();
+    document.getElementById("report").innerText = "";
+
+    try {
+  
+        if (!token || !token.access_token) {
+            ThrowErrorReport();
+            return; // Block the function from executing
+        }
+        
+
+    console.log("Loading Offices...");
+    await read_Office(SPREADSHEET_ID_TSB, 'HonourRoll!F2:G');
+    
+    console.log("Loading Staff...");
+    await read_Staffs(SPREADSHEET_ID_TSB, 'HonourRoll!A2:D');
+    
+    console.log("Loading Attendance...");
+    try {
+      await read_Attendance(SPREADSHEET_ID_TSB, 'AttendanceRoll!A2:C');
     } catch (attendanceError) {
       console.warn("Attendance failed to load, carrying on without it:", attendanceError);
     }

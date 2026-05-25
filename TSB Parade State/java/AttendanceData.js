@@ -1,4 +1,5 @@
 const SPREADSHEET_ID_TSB = '1qyLj7bFNxjGGAycRBj7TnS47Z4nL7DT-F1Atbnw-v0w';
+const SPREADSHEET_ID_TLSB = '1vylevO7L00uoj69y0ScnPj6W2CorNUCZRtflnUsOMZo';
 
 class Staff
 {
@@ -17,11 +18,13 @@ class Staff
 class Office
 {
   #Teams;
+  #SpreadSheetID;
 
-  constructor(OfficeName, OfficeID)
+  constructor(OfficeName, OfficeID, SpreadSheetID)
   {
     this.OfficeName = OfficeName;
     this.OfficeID = OfficeID;
+    this.SpreadSheetID = SpreadSheetID;
 
     this.Staffs = new Map();
     this.Teams = new Map();
@@ -87,7 +90,7 @@ class Office
     for (let [team, staffList] of this.Teams) {
       AddTeamElement(team, this.CountPresent(team), staffList.length);
       for (let staff of staffList) {
-        AddElement(this.OfficeID, staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1]);
+        AddElement(this.OfficeID, staff.AttendanceDetails[0], staff.StaffName, staff.AttendanceDetails[1], this.SpreadSheetID);
       }
     }
   }
@@ -103,9 +106,9 @@ class OfficeManager
   
   }
 
-  AddOffice(OfficeID, OfficeName)
+  AddOffice(OfficeID, OfficeName, SpreadSheetID)
   {
-    this.OfficeList.set(OfficeID, new Office(OfficeName, OfficeID));
+    this.OfficeList.set(OfficeID, new Office(OfficeName, OfficeID, SpreadSheetID));
   }
 
   AddStaff(OfficeID, StaffName, Team)
@@ -149,10 +152,10 @@ class OfficeManager
 
 var officeManager = new OfficeManager();
 
-function read_Office() {
+function read_Office(SPREADSHEET_ID, Range) {
   var params = {
-    spreadsheetId: SPREADSHEET_ID_TSB,
-    range: 'HonourRoll!F2:G',
+    spreadsheetId: SPREADSHEET_ID,
+    range: Range,
   };
 
   return gapi.client.sheets.spreadsheets.values.get(params)
@@ -160,17 +163,17 @@ function read_Office() {
       var rows = response.result.values;
       for (let i = 0; i < rows.length; i++) {
         if (rows[i][0])
-          officeManager.AddOffice(rows[i][0], rows[i][1]);
+          officeManager.AddOffice(rows[i][0], rows[i][1], SPREADSHEET_ID);
       }
     }, function(reason) {
       console.error('error: ' + reason.result.error.message);
     });
 }
 
-function read_Staffs() {
+function read_Staffs(SPREADSHEET_ID, Range) {
   var params = {
-    spreadsheetId: SPREADSHEET_ID_TSB,
-    range: 'HonourRoll!A2:D',
+    spreadsheetId: SPREADSHEET_ID,
+    range: Range,
   };
 
   return gapi.client.sheets.spreadsheets.values.get(params)
@@ -187,10 +190,10 @@ function read_Staffs() {
   });
 }
 
-function read_Attendance() {
+function read_Attendance(SPREADSHEET_ID, Range) {
   var params = {
-    spreadsheetId: SPREADSHEET_ID_TSB,
-    range: 'AttendanceRoll!A2:C',
+    spreadsheetId: SPREADSHEET_ID,
+    range: Range,
   };
 
   return gapi.client.sheets.spreadsheets.values.get(params)
